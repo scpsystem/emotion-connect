@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Maskot sementara">
+  <ellipse cx="120" cy="215" rx="70" ry="12" fill="#29365A" opacity=".08"/>
+  <path d="M120 24c52 0 90 34 90 88 0 52-38 92-90 92S30 164 30 112c0-54 38-88 90-88z" fill="#FFD9A8"/>
+  <circle cx="88" cy="108" r="11" fill="#29365A"/><circle cx="152" cy="108" r="11" fill="#29365A"/>
+  <circle cx="91" cy="104" r="3.5" fill="#fff"/><circle cx="155" cy="104" r="3.5" fill="#fff"/>
+  <ellipse cx="68" cy="136" rx="14" ry="9" fill="#FFA9B8" opacity=".7"/><ellipse cx="172" cy="136" rx="14" ry="9" fill="#FFA9B8" opacity=".7"/>
+  <path d="M96 140q24 22 48 0" fill="none" stroke="#29365A" stroke-width="7" stroke-linecap="round"/>
+</svg>

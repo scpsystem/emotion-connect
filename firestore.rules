@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+    function str(v, max) {
+      return v is string && v.size() > 0 && v.size() <= max;
+    }
+    function validProfile() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['student','guardian','consent','themeChoice','profileComplete','createdAt','updatedAt'])
+        && d.student.keys().hasOnly(['fullName','dateOfBirth','diagnosis'])
+        && str(d.student.fullName, 100)
+        && d.student.dateOfBirth is string
+        && d.student.diagnosis is string && d.student.diagnosis.size() <= 200
+        && d.guardian.keys().hasOnly(['name','age','phone'])
+        && str(d.guardian.name, 100)
+        && d.guardian.age is int && d.guardian.age >= 18 && d.guardian.age <= 100
+        && str(d.guardian.phone, 20)
+        && d.consent.accepted == true
+        && d.profileComplete == true;
+    }
+
+    // Satu dokumen profil bagi setiap akaun penjaga: users/{uid}
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid) && validProfile() && request.resource.data.createdAt == request.time;
+      allow update: if isOwner(uid) && validProfile()
+                    && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if false;
+
+      // Disediakan untuk fasa akan datang (rekod emosi)
+      match /emotionLogs/{logId} {
+        allow read, create: if isOwner(uid);
+        allow update, delete: if false;
+      }
+    }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}
